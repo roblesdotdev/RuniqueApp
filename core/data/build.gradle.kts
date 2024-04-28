@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.psi.psiUtil.canPlaceAfterSimpleNameEntry
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -34,4 +36,6 @@ android {
 
 dependencies {
     implementation(libs.timber)
+    implementation(projects.core.domain)
+    implementation(projects.core.database)
 }

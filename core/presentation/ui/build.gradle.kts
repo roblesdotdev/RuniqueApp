@@ -40,4 +40,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.material3)
+
+    implementation(projects.core.domain)
+    implementation(projects.core.presentation.designsystem)
 }
