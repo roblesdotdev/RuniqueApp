@@ -120,3 +120,4 @@ androidDynamicFeature = { id = "com.android.dynamic-feature", version.ref = "agp
 mapsplatform-secrets-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsPlugin"}
 runiqueapp-android-application = { id = "runiqueapp.android.application", version = "unspecified" }
 runiqueapp-android-application-compose = { id = "runiqueapp.android.application.compose", version = "unspecified" }
+runiqueapp-android-library = { id = "runiqueapp.android.library", version = "unspecified" }
