@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.runiqueapp.android.library)
     alias(libs.plugins.runiqueapp.jvm.ktor)
 }
 

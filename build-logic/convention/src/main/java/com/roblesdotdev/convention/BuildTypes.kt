@@ -80,7 +80,6 @@ private fun BuildType.configureReleaseBuildType(
     buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
 
     isMinifyEnabled = true
-    isShrinkResources = true
     proguardFiles(
         commonExtension.getDefaultProguardFile("proguard-android-optimize.txt"),
         "proguard-rules.pro"
