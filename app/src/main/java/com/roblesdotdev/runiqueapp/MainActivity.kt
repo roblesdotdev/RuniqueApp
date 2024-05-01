@@ -3,21 +3,17 @@ package com.roblesdotdev.runiqueapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.roblesdotdev.auth.presentation.intro.IntroScreenRoot
-import com.roblesdotdev.auth.presentation.register.RegisterScreen
-import com.roblesdotdev.auth.presentation.register.RegisterState
+import androidx.navigation.compose.rememberNavController
 import com.roblesdotdev.core.presentation.designsystem.RuniqueAppTheme
+import com.roblesdotdev.runiqueapp.navigation.NavigationRoot
 
-@Suppress("OPT_IN_USAGE_FUTURE_ERROR")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RuniqueAppTheme {
-                RegisterScreen(
-                    onAction = {},
-                    state = RegisterState()
-                )
+                val navController = rememberNavController()
+                NavigationRoot(navController = navController)
             }
         }
     }

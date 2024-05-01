@@ -47,6 +47,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RegisterScreenRoot(
     viewModel: RegisterViewModel = koinViewModel(),
+    onSignInClick: () -> Unit,
+    onSuccessfulRegistration: () -> Unit,
 ) {
     RegisterScreen(state = viewModel.state, onAction = viewModel::onAction)
 }
@@ -124,7 +126,7 @@ fun RegisterScreen(
                 title = stringResource(
                     R.string.password
                 ),
-                isVisible = true,
+                isVisible = state.isPasswordVisible,
                 onChangeVisibility = {
                     onAction(RegisterAction.OnTogglePasswordVisibilityClick)
                 }

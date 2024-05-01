@@ -14,10 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
+import androidx.compose.foundation.text2.BasicSecureTextField
 import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.foundation.text2.input.TextObfuscationMode
 import androidx.compose.foundation.text2.input.rememberTextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -74,15 +73,15 @@ fun RuniquePasswordTextField(
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
-        BasicTextField2(
+        BasicSecureTextField(
             state = state,
             textStyle = LocalTextStyle.current.copy(
                 color = MaterialTheme.colorScheme.onBackground,
             ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-            ),
-            lineLimits = TextFieldLineLimits.SingleLine,
+            textObfuscationMode = if (isVisible) {
+                TextObfuscationMode.Visible
+            } else TextObfuscationMode.Hidden,
+            keyboardType = KeyboardType.Password,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
@@ -134,7 +133,7 @@ fun RuniquePasswordTextField(
                             .size(24.dp)
                     ) {
                         Icon(
-                            imageVector = if (isVisible) EyeClosedIcon else EyeOpenedIcon,
+                            imageVector = if (!isVisible) EyeClosedIcon else EyeOpenedIcon,
                             contentDescription = if (isVisible)
                                 stringResource(R.string.hide_password)
                             else stringResource(
