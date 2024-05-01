@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roblesdotdev.auth.domain.PasswordValidationState
+import com.roblesdotdev.auth.domain.UserDataValidator
 import com.roblesdotdev.auth.presentation.R
 import com.roblesdotdev.core.presentation.designsystem.CheckIcon
 import com.roblesdotdev.core.presentation.designsystem.CrossIcon
@@ -149,7 +150,7 @@ fun PasswordRequirementList(state: PasswordValidationState) {
         PasswordRequirement(
             text = stringResource(
                 R.string.at_least_x_characters,
-                PasswordValidationState.MIN_PASSWORD_LENGTH,
+                UserDataValidator.MIN_PASSWORD_LENGTH,
             ),
             isValid = state.hasMinLength,
         )

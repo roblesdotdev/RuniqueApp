@@ -8,8 +8,4 @@ data class PasswordValidationState(
 ) {
     val isValidPassword: Boolean
         get() = hasMinLength && hasNumber && hasLowerCaseCharacter && hasUpperCaseCharacter
-
-    companion object {
-        const val MIN_PASSWORD_LENGTH = 9
-    }
 }
