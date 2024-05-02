@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text2.BasicSecureTextField
+import androidx.compose.foundation.text2.input.ImeActionHandler
 import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.foundation.text2.input.TextObfuscationMode
 import androidx.compose.foundation.text2.input.rememberTextFieldState
@@ -35,6 +36,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,7 @@ fun RuniquePasswordTextField(
     modifier: Modifier = Modifier,
     error: String? = null,
     isVisible: Boolean = true,
+    imeAction: ImeAction = ImeAction.Default,
     onChangeVisibility: () -> Unit,
 ) {
     var isFocused by remember {
@@ -82,6 +85,7 @@ fun RuniquePasswordTextField(
                 TextObfuscationMode.Visible
             } else TextObfuscationMode.Hidden,
             keyboardType = KeyboardType.Password,
+            imeAction = imeAction,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))

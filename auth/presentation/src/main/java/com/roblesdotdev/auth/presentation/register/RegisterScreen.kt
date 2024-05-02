@@ -1,5 +1,6 @@
 package com.roblesdotdev.auth.presentation.register
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text2.input.ImeActionHandler
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,10 +22,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,6 +49,7 @@ import com.roblesdotdev.core.presentation.designsystem.components.GradientBackgr
 import com.roblesdotdev.core.presentation.designsystem.components.RuniqueActionButton
 import com.roblesdotdev.core.presentation.designsystem.components.RuniquePasswordTextField
 import com.roblesdotdev.core.presentation.designsystem.components.RuniqueTextField
+import com.roblesdotdev.core.presentation.ui.ObserveAsEvents
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -50,7 +58,35 @@ fun RegisterScreenRoot(
     onSignInClick: () -> Unit,
     onSuccessfulRegistration: () -> Unit,
 ) {
-    RegisterScreen(state = viewModel.state, onAction = viewModel::onAction)
+
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    ObserveAsEvents(flow = viewModel.events) {event ->
+        when(event) {
+            is RegisterEvent.Failure -> {
+                keyboardController?.hide()
+                Toast.makeText(
+                    context,
+                    event.error.asString(context),
+                    Toast.LENGTH_LONG,
+                ).show()
+            }
+            RegisterEvent.RegistrationSuccess -> {
+                keyboardController?.hide()
+                Toast.makeText(
+                    context,
+                    R.string.registration_successful,
+                    Toast.LENGTH_LONG,
+                ).show()
+                onSuccessfulRegistration()
+            }
+        }
+    }
+
+    RegisterScreen(
+        state = viewModel.state,
+        onAction = viewModel::onAction,
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -115,7 +151,10 @@ fun RegisterScreen(
                 hint = stringResource(R.string.demo_email),
                 title = stringResource(R.string.email),
                 modifier = Modifier.fillMaxWidth(),
-                keyboardType = KeyboardType.Email,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
+                ),
                 additionalInfo = stringResource(R.string.info_valid_email)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -126,10 +165,11 @@ fun RegisterScreen(
                 title = stringResource(
                     R.string.password
                 ),
+                imeAction = ImeAction.Done,
                 isVisible = state.isPasswordVisible,
                 onChangeVisibility = {
                     onAction(RegisterAction.OnTogglePasswordVisibilityClick)
-                }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             PasswordRequirementList(state = state.passwordValidationState)

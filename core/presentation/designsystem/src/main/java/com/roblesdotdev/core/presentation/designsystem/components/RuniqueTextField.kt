@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text2.BasicTextField2
 import androidx.compose.foundation.text2.input.TextFieldLineLimits
@@ -53,7 +54,8 @@ fun RuniqueTextField(
     modifier: Modifier = Modifier,
     error: String? = null,
     additionalInfo: String? = null,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     var isFocused by remember {
         mutableStateOf(false)
@@ -83,9 +85,8 @@ fun RuniqueTextField(
             textStyle = LocalTextStyle.current.copy(
                 color = MaterialTheme.colorScheme.onBackground,
             ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = keyboardType,
-            ),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             lineLimits = TextFieldLineLimits.SingleLine,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier

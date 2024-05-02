@@ -1,5 +1,6 @@
-package com.roblesdotdev.core.data
+package com.roblesdotdev.core.data.networking
 
+import com.roblesdotdev.core.data.BuildConfig
 import com.roblesdotdev.core.domain.util.DataError
 import com.roblesdotdev.core.domain.util.Result
 import io.ktor.client.HttpClient
