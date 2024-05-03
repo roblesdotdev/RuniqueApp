@@ -21,8 +21,12 @@ import com.roblesdotdev.auth.presentation.register.RegisterScreenRoot
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
+    isLoggedIn: Boolean,
 ) {
-    NavHost(navController = navController, startDestination = "auth") {
+    NavHost(
+        navController = navController,
+        startDestination = if (isLoggedIn) "run" else "auth"
+    ) {
         authGraph(navController)
         runGraph(navController)
     }
@@ -94,7 +98,7 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(text = "Run overview")
+                Text(text = "Run overview", color = Color.White)
             }
         }
     }
