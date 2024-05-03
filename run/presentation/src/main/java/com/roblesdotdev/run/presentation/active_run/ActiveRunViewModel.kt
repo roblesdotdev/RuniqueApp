@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_PARAMETER", "unused")
+
 package com.roblesdotdev.run.presentation.active_run
 
 import androidx.compose.runtime.getValue
