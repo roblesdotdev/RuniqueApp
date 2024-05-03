@@ -17,6 +17,7 @@ import androidx.navigation.navigation
 import com.roblesdotdev.auth.presentation.intro.IntroScreenRoot
 import com.roblesdotdev.auth.presentation.login.LoginScreenRoot
 import com.roblesdotdev.auth.presentation.register.RegisterScreenRoot
+import com.roblesdotdev.run.presentation.run_overview.RunOverviewScreenRoot
 
 @Composable
 fun NavigationRoot(
@@ -93,13 +94,7 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
         route = "run"
     ) {
         composable("run_overview") {
-            Column(
-                modifier = Modifier.fillMaxSize().background(Color.Black),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(text = "Run overview", color = Color.White)
-            }
+            RunOverviewScreenRoot()
         }
     }
 }
