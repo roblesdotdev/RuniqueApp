@@ -1,6 +1,14 @@
 package com.roblesdotdev.runiqueapp.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,6 +24,7 @@ fun NavigationRoot(
 ) {
     NavHost(navController = navController, startDestination = "auth") {
         authGraph(navController)
+        runGraph(navController)
     }
 }
 
@@ -53,7 +62,13 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
 
         composable(route = "login") {
             LoginScreenRoot(
-                onLoginSuccess = {},
+                onLoginSuccess = {
+                    navController.navigate("run") {
+                        popUpTo("auth") {
+                            inclusive = true
+                        }
+                    }
+                },
                 onRegisterClick = {
                     navController.navigate("register") {
                         popUpTo("login") {
@@ -64,6 +79,23 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
                     }
                 }
             )
+        }
+    }
+}
+
+private fun NavGraphBuilder.runGraph(navController: NavHostController) {
+    navigation(
+        startDestination = "run_overview",
+        route = "run"
+    ) {
+        composable("run_overview") {
+            Column(
+                modifier = Modifier.fillMaxSize().background(Color.Black),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(text = "Run overview")
+            }
         }
     }
 }
