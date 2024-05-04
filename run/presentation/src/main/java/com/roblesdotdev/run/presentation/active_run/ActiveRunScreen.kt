@@ -2,9 +2,13 @@
 
 package com.roblesdotdev.run.presentation.active_run
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +22,7 @@ import com.roblesdotdev.core.presentation.designsystem.components.RuniqueFloatin
 import com.roblesdotdev.core.presentation.designsystem.components.RuniqueScaffold
 import com.roblesdotdev.core.presentation.designsystem.components.RuniqueToolbar
 import com.roblesdotdev.run.presentation.R
+import com.roblesdotdev.run.presentation.active_run.components.RunDataCard
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -66,8 +71,17 @@ fun ActiveRunScreen(
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
-            Text(text = "Active run")
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)) {
+            RunDataCard(
+                elapsedTime = state.elapsedTime,
+                runData = state.runData,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .padding(paddingValues)
+                    .fillMaxWidth()
+            )
         }
     }
 }
