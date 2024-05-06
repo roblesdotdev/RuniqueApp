@@ -199,7 +199,7 @@ private fun ActivityResultLauncher<Array<String>>.requestRuniquePermissions(
         !hasLocationPermission -> {
             launch(locationPermissions)
         }
-        else -> launch(notificationPermission)
+        !hasNotificationPermission -> launch(notificationPermission)
     }
 }
 
