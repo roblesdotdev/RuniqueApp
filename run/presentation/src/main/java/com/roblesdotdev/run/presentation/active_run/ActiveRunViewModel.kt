@@ -5,14 +5,18 @@ package com.roblesdotdev.run.presentation.active_run
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roblesdotdev.run.domain.RunningTracker
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 
 class ActiveRunViewModel(
@@ -24,7 +28,16 @@ class ActiveRunViewModel(
     private val eventChannel = Channel<ActiveRunEvent>()
     val events = eventChannel.receiveAsFlow()
 
+    private val shouldTrack = snapshotFlow { state.shouldTrack }
+        .stateIn(viewModelScope, SharingStarted.Lazily, state.shouldTrack)
     private val hasLocationPermission = MutableStateFlow(false)
+
+    private val isTracking = combine(
+        shouldTrack,
+        hasLocationPermission
+    ) { shouldTrack, hasPermission ->
+        shouldTrack && hasPermission
+    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     init {
         hasLocationPermission
@@ -37,10 +50,30 @@ class ActiveRunViewModel(
             }
             .launchIn(viewModelScope)
 
+        isTracking
+            .onEach { isTracking ->
+                runningTracker.setIsTracking(isTracking)
+            }
+            .launchIn(viewModelScope)
+
         runningTracker
             .currentLocation
-            .onEach { location ->
-                Timber.tag("LOCATION").d("NEW_LOCATION $location")
+            .onEach {
+                state = state.copy(currentLocation = it?.location)
+            }
+            .launchIn(viewModelScope)
+
+        runningTracker
+            .runData
+            .onEach {
+                state = state.copy(runData = it)
+            }
+            .launchIn(viewModelScope)
+
+        runningTracker
+            .elapsedTime
+            .onEach {
+                state = state.copy(elapsedTime = it)
             }
             .launchIn(viewModelScope)
     }
@@ -48,8 +81,20 @@ class ActiveRunViewModel(
     fun onAction(action: ActiveRunAction) {
         when (action) {
             ActiveRunAction.OnFinishRunAction -> Unit
-            ActiveRunAction.OnResumeClick -> Unit
-            ActiveRunAction.OnToggleRunClick -> Unit
+            ActiveRunAction.OnResumeClick -> {
+                state = state.copy(
+                    shouldTrack = true,
+                )
+            }
+            ActiveRunAction.OnBackClick -> {
+                state = state.copy(shouldTrack = false)
+            }
+            ActiveRunAction.OnToggleRunClick -> {
+                state = state.copy(
+                    hasStartedRunning = true,
+                    shouldTrack = !state.shouldTrack,
+                )
+            }
             is ActiveRunAction.SubmitLocationPermissionInfo -> {
                 hasLocationPermission.value = action.acceptedLocationPermission
                 state = state.copy(
