@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.roblesdotdev.core.presentation.designsystem.RuniqueAppTheme
 import com.roblesdotdev.core.presentation.designsystem.StartIcon
 import com.roblesdotdev.core.presentation.designsystem.StopIcon
+import com.roblesdotdev.core.presentation.designsystem.components.RuniqueActionButton
 import com.roblesdotdev.core.presentation.designsystem.components.RuniqueDialog
 import com.roblesdotdev.core.presentation.designsystem.components.RuniqueFloatingActionButton
 import com.roblesdotdev.core.presentation.designsystem.components.RuniqueOutlinedActionButton
@@ -159,6 +160,34 @@ fun ActiveRunScreen(
         }
     }
 
+    if (!state.shouldTrack && state.hasStartedRunning) {
+        RuniqueDialog(
+            title = stringResource(id = R.string.running_is_paused),
+            description = stringResource(id = R.string.resume_or_finish_run),
+            onDismiss = { /*TODO*/ },
+            primaryButton = {
+                RuniqueActionButton(
+                    text = stringResource(id = R.string.resume),
+                    isLoading = false,
+                    onClick = {
+                        onAction(ActiveRunAction.OnResumeClick)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            },
+            secondaryButton = {
+                RuniqueOutlinedActionButton(
+                    text = stringResource(id = R.string.finish),
+                    onClick = {
+                        onAction(ActiveRunAction.OnFinishRunAction)
+                    },
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        )
+    }
+
+
     if (state.showLocationRationale || state.showNotificationRationale) {
         RuniqueDialog(
             title = stringResource(id = R.string.permission_required),
@@ -166,9 +195,11 @@ fun ActiveRunScreen(
                 state.showNotificationRationale && state.showLocationRationale -> {
                     stringResource(id = R.string.location_notification_rationale)
                 }
+
                 state.showLocationRationale -> {
                     stringResource(id = R.string.location_rationale)
-                } 
+                }
+
                 else -> stringResource(id = R.string.notification_rationale)
             },
             onDismiss = { /* Dismiss is not allowed on permission dialog. */ },
@@ -204,9 +235,11 @@ private fun ActivityResultLauncher<Array<String>>.requestRuniquePermissions(
         !hasLocationPermission && !hasNotificationPermission -> {
             launch(locationPermissions + notificationPermission)
         }
+
         !hasLocationPermission -> {
             launch(locationPermissions)
         }
+
         !hasNotificationPermission -> launch(notificationPermission)
     }
 }
